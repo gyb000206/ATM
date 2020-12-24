@@ -6,31 +6,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.PaintEvent;
+import static java.lang.Thread.sleep;
 
 /**
  * @author 高宇博
  * @ID 2503190213
- * 主菜单
  */
 
-public class Interfaces extends Thread {
-    @Override
-    public void run() {
-        new Interfaces();
-    }
 
-    JFrame frame = new JFrame("主界面");
-    JPanel panel = new JPanel();
+public class Interfaces {
+    static JFrame frame = new JFrame("主界面");
+    static JPanel panel = new JPanel();
     //创建主界面
-    JButton buttonGraphQuery = new JButton("查询");
-    JButton buttonDeposition = new JButton("存款");
-    JButton buttonWithdrawals = new JButton("取款");
-    JButton buttonExit = new JButton("退出");
-    JTextArea textArea = new JTextArea();
+    static JButton buttonGraphQuery = new JButton("查询");
+    static JButton buttonDeposition = new JButton("存款");
+    static JButton buttonWithdrawals = new JButton("取款");
+    static JButton buttonExit = new JButton("退出");
+    static JTextArea textArea = new JTextArea();
 
     //设置主面板
-    public Interfaces() {
+    public static void Interfaces() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //关闭窗口随机退出程序
         frame.setVisible(true);
@@ -47,7 +42,7 @@ public class Interfaces extends Thread {
     }
 
     //将文本框和按钮等组件添加进面板容器中
-    private void placeComponents(JPanel panel) {
+    private static void placeComponents(JPanel panel) {
         panel.add(buttonGraphQuery);
         panel.add(buttonDeposition);
         panel.add(buttonWithdrawals);
@@ -56,39 +51,47 @@ public class Interfaces extends Thread {
         Event();
     }
 
-    //创建按钮事件方法
-    public void Event() {
-        //创建查询按纽激发的事件
+    public static void Event() {
         buttonGraphQuery.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea.setText("余额为:" + new Money().getBalance());
-                //接收Money类中getBalance()方法，并添加到textArea中显示出来
+                textArea.setText("余额为" + Money.getBalance());
+                //接收getBalance()并显示在textArea里
             }
         });
-        //创建存款按纽激发的事件
+
         buttonDeposition.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Deposition().start();
-                //TODO 存款界面以新线程启动
+                Deposition.Deposition();
+                //跳转到存款金额选择界面
+                frame.setVisible(false);
+                //当前用户选择主菜单界面不可见
             }
         });
-        //创建取款按纽激发的事件
+
         buttonWithdrawals.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Withdrawals().start();
-                //TODO 取款界面以新线程启动
+                Withdrawals.Withdrawals();
+                frame.setVisible(false);
+                //当前用户选择主菜单界面不可见
             }
         });
 
         buttonExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("关闭Java虚拟机");
+                JOptionPane.showMessageDialog(null, "谢谢使用，欢迎下次光临");
+                //使用结束，弹出窗口
+                try {
+                    sleep(3000);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+                //线程休眠3秒后，关闭JVM
                 System.exit(0);
-                //TODO 结束程序，关闭JVM
+
             }
         });
     }
