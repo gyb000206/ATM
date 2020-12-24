@@ -3,40 +3,32 @@ package view;
 import date.PassWord;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 
 /**
  * @author 高宇博
  * @ID 2503190213
- * 修改密码
  */
+public class Register {
 
-public class Register extends Thread {
+    static PassWord passWord = new PassWord();
 
-    @Override
-    public void run() {
-        new Register();
-    }
 
-    PassWord passWord = new PassWord();
-    Login login = new Login();
-    //创建Password的类内对象
-
-    private final JFrame frame = new JFrame("修改密码");
+    private static final JFrame frame = new JFrame("修改密码");
     //创建主面板
-    private final JPanel panel = new JPanel();
-    private final JLabel labelAdmin = new JLabel("管理员账号");
-    private final JLabel labelNewPass = new JLabel("新密码");
+    private static final JPanel panel = new JPanel();
+    private static final JLabel labelAdmin = new JLabel("管理员账号");
+    private static final JLabel labelNewPass = new JLabel("新密码");
     //    private final JLabel labelNewPass2 = new JLabel("再次确认新密码");
-    private final JTextField textFieldAdmin = new JTextField();
-    private final JTextField textFieldNewPass = new JTextField();
+    private static final JTextField textFieldAdmin = new JTextField();
+    private static final JTextField textFieldNewPass = new JTextField();
     //    private final JTextField textFieldNewPass2 = new JTextField();
-    private final JButton buttonConfirm = new JButton("确认更改");
-    private final JButton buttonReset = new JButton("重置密码");
+    private static final JButton buttonConfirm = new JButton("确认更改");
+    private static final JButton buttonReset = new JButton("重置密码");
 
-    public Register() {
+    public static void Register() {
         //设置窗体位置和大小
         frame.setSize(300, 200);
         frame.setLocationRelativeTo(null);
@@ -54,12 +46,14 @@ public class Register extends Thread {
      *
      * @param panel
      */
-    private void placeComponents(JPanel panel) {
+    private static void placeComponents(JPanel panel) {
         //往窗体里放其他控件
         panel.setLayout(null);
         //设置布局为 null
-        // 创建labelAdmin
+        frame.setBackground(Color.ORANGE);
+        //设置窗口背景颜色
         labelAdmin.setBounds(30, 30, 80, 25);
+        // 创建labelAdmin
         panel.add(labelAdmin);
         // 创建文本域用于用户输入
         textFieldAdmin.setBounds(105, 30, 165, 25);
@@ -83,27 +77,26 @@ public class Register extends Thread {
         Event();
     }
 
-    public void Event() {
+    public static void Event() {
         buttonConfirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 管理员账户是否正确，若不正确，弹出窗口
-                if (textFieldAdmin.getText().equals(new PassWord().getAdministrator())) {
-                    //新密码位数是否小于6位，若小于6位，弹出窗口
+                if (textFieldAdmin.getText().equals(passWord.getAdministrator())) {
+                    // 管理员账户是否正确，若不正确，弹出窗口
                     if (textFieldNewPass.getText().length() >= 6) {
-                        // 新密码是否与原密码相同，若相同，弹出窗口
-                        if (!textFieldNewPass.getText().equals(new PassWord().getPassWord())) {
-
-                            //TODO 此处有BUG
+                        //新密码位数是否小于6位，若小于6位，弹出窗口
+                        if (!textFieldNewPass.getText().equals(passWord.getPassWord())) {
+                            // 新密码是否与原密码相同，若相同，弹出窗口
                             passWord.setPassWord(textFieldNewPass.getText());
-                            //TODO
-                            System.out.println(passWord.getPassWord());
-                            //将新密码写入缓存
-                            System.out.println("密码修改成功");
-                            login.run();
-                            //再次打开登录窗口
+                            //接收password文本框内字符串，并赋值给setPassword()方法
+                            System.out.println("修改密码成功，新密码为" + textFieldNewPass.getText());
+                            System.out.println("password" + passWord.getPassWord());
+                            //控制台输出修改结果
+                            Login.Login();
+                            //再次打开登录窗口，来输入修改后的新密码
                             frame.setVisible(false);
-                            //窗体消失
+                            //当前修改密码后窗口不可见
+
                         } else {
                             JOptionPane.showMessageDialog(null, "新密码与旧密码相同，请重新输入");
                         }
@@ -113,15 +106,13 @@ public class Register extends Thread {
                 } else {
                     JOptionPane.showMessageDialog(null, "管理员账户错误，请重新输入");
                 }
-
             }
         });
+
         buttonReset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //清空文本输入框，重置账号密码
-                textFieldAdmin.setText("");
-                textFieldNewPass.setText("");
+
             }
         });
     }
