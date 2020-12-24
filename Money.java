@@ -1,25 +1,28 @@
 package date;
+
 /**
  * @author 高宇博
  * @ID 2503190213
- * 余额类
  */
-public class Money {
-    private double Balance = 10000;
 
-    public void setBalance(double money) {
-        this.Balance = money;
+
+public class Money {
+    private static double Balance = 10000;
+
+    public static void setBalance(double balance) {
+        Balance = balance;
     }
 
-    public double getBalance() {
+    public static double getBalance() {
         return Balance;
     }
 
-    public void setAddBalance(double money) {
-        this.Balance = getBalance() + money;
+    public static void setAddBalance(double money) {
+        Balance += money;
+    }
+    public static  void setWithdrawalsBalance(double withdrawals){
+        Balance-=withdrawals;
     }
 
-    public void setWithdrawalsBalance(double money) {
-        this.Balance = getBalance() - money;
-    }
+
 }
